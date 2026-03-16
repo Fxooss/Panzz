@@ -14,7 +14,7 @@ function initDB() {
     fs.writeFileSync(DB_FILE, JSON.stringify({
       products: [],
       orders: [],
-      settings: { rek: '1234567890', qris: '', password: 'PANZZ' }
+      settings: { rek: '081287538774', qris: '', password: 'PANZZ' }
     }, null, 2));
   }
 }
