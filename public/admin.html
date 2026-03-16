@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
+
+    <!-- LOGIN OVERLAY (Muncul Pertama Kali) -->
+    <div class="sidebar-overlay active" id="adminLoginOverlay">
+        <div class="sidebar-content" style="width: 300px; padding: 30px; text-align: center">
+            <h2>🔐 Seller Access</h2>
+            <p style="color:var(--text-secondary); margin: 10px 0 20px">Masukkan password untuk lanjut.</p>
+            <input type="password" id="adminPassInput" maxlength="5" placeholder="*****" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--accent); background:var(--bg-secondary); color:var(--text-primary); text-align:center; letter-spacing:5px; font-size:20px; margin-bottom:15px">
+            <button class="btn-add" style="width:100%" onclick="attemptLogin()">Masuk</button>
+            <p id="loginError" style="color:var(--danger); margin-top:10px; display:none">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
     <div class="admin-container">
         <aside class="admin-sidebar">
             <div class="sidebar-logo">⚙️ PanzzxConfig</div>
@@ -28,7 +41,6 @@
                     <input type="text" id="inpPrice" placeholder="Harga (0 = Gratis)">
                     <textarea id="inpDesc" placeholder="Deskripsi" style="grid-column: span 2"></textarea>
                     
-                    <!-- MULTI LINK AREA -->
                     <div class="form-group full-width" style="background: var(--bg-secondary); padding: 15px; border-radius: 12px;">
                         <label>🔗 Link Task (Khusus Produk Gratis)</label>
                         <div id="teleLinksContainer" style="margin-top:10px; display:flex; flex-direction:column; gap:8px"></div>
@@ -69,6 +81,7 @@
             </section>
         </main>
     </div>
+
     <script src="admin.js"></script>
 </body>
-</html>
+    </html>
