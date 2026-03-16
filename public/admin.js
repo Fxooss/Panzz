@@ -15,13 +15,10 @@ async function attemptLogin() {
     }
 }
 
-// Check if already logged in this session (simple flag)
-// Jika refresh halaman, minta password lagi demi keamanan, atau biarin aja gpp.
-
 function initApp() {
     loadProducts();
     loadSettings();
-    addLinkInput(); // Init 1 input link
+    addLinkInput();
 }
 
 // === VARS ===
@@ -34,11 +31,7 @@ const fileInput = document.getElementById('inpFile');
 fileDrop.onclick = () => fileInput.click();
 fileDrop.ondragover = (e) => { e.preventDefault(); fileDrop.style.borderColor = 'var(--accent)'; };
 fileDrop.ondragleave = () => { fileDrop.style.borderColor = 'rgba(255,255,255,0.1)'; };
-fileDrop.ondrop = (e) => {
-    e.preventDefault();
-    fileDrop.style.borderColor = 'rgba(255,255,255,0.1)';
-    if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-};
+fileDrop.ondrop = (e) => { e.preventDefault(); fileDrop.style.borderColor = 'rgba(255,255,255,0.1)'; if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); };
 fileInput.onchange = (e) => { if(e.target.files[0]) handleFile(e.target.files[0]); };
 
 function handleFile(f) {
