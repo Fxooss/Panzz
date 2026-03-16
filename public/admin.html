@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Panel</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
 
     <!-- LOGIN OVERLAY (Muncul Pertama Kali) -->
-    <div class="sidebar-overlay active" id="adminLoginOverlay">
-        <div class="sidebar-content" style="width: 300px; padding: 30px; text-align: center">
+    <div class="login-overlay-admin active" id="adminLoginOverlay">
+        <div class="login-box">
             <h2>🔐 Seller Access</h2>
-            <p style="color:var(--text-secondary); margin: 10px 0 20px">Masukkan password untuk lanjut.</p>
+            <p style="color:var(--text-secondary); margin: 10px 0 20px">Masukkan password:</p>
             <input type="password" id="adminPassInput" maxlength="5" placeholder="*****" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--accent); background:var(--bg-secondary); color:var(--text-primary); text-align:center; letter-spacing:5px; font-size:20px; margin-bottom:15px">
             <button class="btn-add" style="width:100%" onclick="attemptLogin()">Masuk</button>
             <p id="loginError" style="color:var(--danger); margin-top:10px; display:none">Password salah!</p>
         </div>
     </div>
 
-    <!-- MAIN APP -->
+    <!-- APP CONTAINER -->
     <div class="admin-container">
         <aside class="admin-sidebar">
             <div class="sidebar-logo">⚙️ PanzzxConfig</div>
@@ -51,31 +51,21 @@
                     <input type="file" id="inpFile" hidden>
                     <button class="btn-add" style="grid-column: span 2" onclick="addProduct()">Tambah</button>
                 </div>
-                <div class="product-list-admin" id="adminProdList"></div>
             </section>
 
             <!-- ORDERS -->
             <section id="section-orders" class="admin-section">
                 <h2>Verifikasi Pembayaran</h2>
-                <div id="ordersList" class="orders-list"></div>
+                <div id="ordersList"></div>
             </section>
 
             <!-- SETTINGS -->
             <section id="section-settings" class="admin-section">
                 <h2>Pengaturan</h2>
                 <div class="form-grid">
-                    <div class="form-group full-width">
-                        <label>Nomor Rekening</label>
-                        <input type="text" id="setRek">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>URL QRIS</label>
-                        <input type="text" id="setQris">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Password Login</label>
-                        <input type="text" id="setPass" maxlength="5">
-                    </div>
+                    <div class="form-group full-width"><label>Nomor Rekening</label><input type="text" id="setRek"></div>
+                    <div class="form-group full-width"><label>URL QRIS</label><input type="text" id="setQris"></div>
+                    <div class="form-group full-width"><label>Password Login</label><input type="text" id="setPass" maxlength="5"></div>
                     <button class="btn-add" style="grid-column: span 2" onclick="saveSettings()">Simpan</button>
                 </div>
             </section>
@@ -84,4 +74,4 @@
 
     <script src="admin.js"></script>
 </body>
-    </html>
+</html>
