@@ -6,15 +6,14 @@
     <title>PanzzxAutoOrder</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-mode"> <!-- Default Dark -->
-
+<body class="dark-mode">
     <!-- HEADER -->
     <header class="top-header">
         <div class="header-inner">
             <div class="logo">⚡ PanzzxAutoOrder</div>
             <div class="header-actions">
                 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                <button class="btn-dashboard" onclick="openDashboard()">My Orders</button>
+                <button class="btn btn-sec" onclick="openDashboard()">Orders</button>
                 <button class="btn-admin" onclick="promptSellerLogin()">P</button>
             </div>
         </div>
@@ -24,7 +23,7 @@
     <main class="main-container">
         <div class="market-title">
             <h2>Digital Market</h2>
-            <p>Fast, Secure, Automated Delivery.</p>
+            <p>Fast, Secure, Automated.</p>
         </div>
         <div class="product-grid" id="productGrid"></div>
     </main>
@@ -41,61 +40,56 @@
         </div>
     </div>
 
-    <!-- TASK MODAL (FREE PRODUCT) -->
+    <!-- TASK MODAL (SUB2UNLOCK STYLE) -->
     <div class="modal-overlay" id="taskModal">
         <div class="modal-content task-modal">
-            <div class="task-icon">🎯</div>
-            <h2>Task Verification</h2>
-            <p style="color:var(--text-secondary); margin: 10px 0 20px">Join our community to get this product for FREE!</p>
-            
-            <a href="#" target="_blank" class="btn-action btn-free" id="taskJoinBtn" style="text-decoration:none; margin-bottom:15px">
-                🚀 Join Channel / Group
-            </a>
-
-            <div class="task-progress"><div class="task-progress-bar" id="progressBar"></div></div>
-            <p id="timerText" style="font-size:12px; color:var(--text-secondary)">Wait 4 seconds...</p>
-            <button class="btn-action btn-rek" id="verifyTaskBtn" disabled onclick="claimFreeProduct()">
-                ✅ Verify & Claim
-            </button>
+            <button class="close-modal" onclick="closeTaskModal()">×</button>
+            <div class="task-header">
+                <h3>🎁 Klaim Gratis</h3>
+                <p>Selesaikan task di bawah untuk mendapat produk</p>
+            </div>
+            <div class="task-body" id="taskListContainer"></div>
+            <div class="task-footer">
+                <button class="btn-claim" id="btnClaim" disabled onclick="claimFree()">KLAIM PRODUK</button>
+            </div>
         </div>
     </div>
 
-    <!-- VERIF MODAL (PAID) -->
+    <!-- VERIF MODAL -->
     <div class="modal-overlay" id="verifModal">
         <div class="modal-content detail-modal">
             <button class="close-modal" onclick="closeVerifModal()">×</button>
-            <h3>🚀 Konfirmasi Pembayaran</h3>
-            <p style="color:var(--text-secondary)">Produk: <strong id="verifProdName"></strong></p>
-            <input type="text" id="buyerNameInput" placeholder="Nama / Username" style="width:100%;padding:12px;margin:10px 0;border-radius:10px;border:none;background:var(--bg-secondary);color:var(--text-primary)">
-            <div class="upload-area" id="uploadArea" style="border:2px dashed var(--accent);padding:20px;border-radius:12px;cursor:pointer">
-                <span>📁 Upload Bukti Bayar</span>
+            <h3>🚀 Pembayaran</h3>
+            <p style="color:var(--text-secondary); margin: 10px 0">Produk: <strong id="verifProdName"></strong></p>
+            <input type="text" id="buyerNameInput" placeholder="Nama Kamu" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none; background:var(--bg-secondary); color:var(--text-primary)">
+            <div class="file-drop" id="uploadArea" style="padding:20px; margin-bottom:10px">
+                <span>📁 Upload Bukti</span>
                 <input type="file" id="proofInput" hidden accept="image/*">
             </div>
-            <img src="" id="previewImg" class="preview-img" style="display:none; width:100%; border-radius:8px; margin-top:10px">
-            <button class="btn-action btn-rek" style="margin-top:15px" onclick="submitProof()">Kirim</button>
+            <img src="" id="previewImg" class="preview-img" style="display:none; width:100%; border-radius:8px">
+            <button class="btn-action btn-rek" style="margin-top:10px" onclick="submitProof()">Kirim</button>
         </div>
     </div>
 
-    <!-- DASHBOARD & LOGIN SIDEBAR (Sama seperti sebelumnya) -->
+    <!-- DASHBOARD -->
     <div class="modal-overlay" id="dashboardModal">
         <div class="modal-content task-modal">
-            <div class="dash-header" style="width:100%; display:flex; justify-content:space-between; margin-bottom:20px">
-                <h3>📦 Orders</h3>
-                <button onclick="closeDashboard()" style="background:none; border:none; color:var(--text-primary); font-size:24px; cursor:pointer">×</button>
-            </div>
-            <div id="dashBody" style="text-align:left"></div>
+            <div class="task-header"><h3>📦 Orders</h3></div>
+            <div class="task-body" id="dashBody"></div>
+            <div class="task-footer"><button class="btn btn-sec" onclick="closeDashboard()" style="width:auto">Tutup</button></div>
         </div>
     </div>
 
+    <!-- LOGIN SIDEBAR -->
     <div class="sidebar-overlay" id="loginSidebar">
         <div class="sidebar-content">
             <h3>🔐 Seller</h3>
-            <input type="password" id="sellerPass" maxlength="5" placeholder="*****">
-            <button class="btn-admin" style="width:100%; border-radius:12px" onclick="verifySeller()">Masuk</button>
+            <input type="password" id="sellerPass" maxlength="5" placeholder="*****" style="width:100%; padding:12px; margin:15px 0; border-radius:8px; border:1px solid var(--accent); background:var(--bg-secondary); color:var(--text-primary); text-align:center; letter-spacing:5px; font-size:20px">
+            <button class="btn-add" style="width:100%" onclick="verifySeller()">Masuk</button>
             <button style="width:100%; background:none; border:none; color:var(--text-secondary); margin-top:10px; cursor:pointer" onclick="closeSidebar()">Batal</button>
         </div>
     </div>
 
     <script src="app.js"></script>
 </body>
-</html>
+                </html>
