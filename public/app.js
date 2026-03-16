@@ -1,6 +1,28 @@
 let currentProduct = null;
+let taskTimer = null;
 
-// Render Produk
+// THEME TOGGLE
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const isDark = !document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    const isDark = !document.body.classList.contains('light-mode');
+    document.querySelector('.theme-toggle').innerText = isDark ? '🌙' : '☀️';
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') document.body.classList.add('light-mode');
+    updateThemeIcon();
+    renderProducts();
+});
+
+// PRODUCTS
 async function renderProducts() {
     const res = await fetch('/api/products');
     const products = await res.json();
@@ -12,15 +34,18 @@ async function renderProducts() {
         card.className = 'product-card';
         card.onclick = () => openDetail(p);
         
+        const isFree = (p.price === '0' || p.price.toLowerCase().includes('gratis'));
         const imgHtml = p.img 
             ? `<img src="${p.img}" alt="${p.name}">` 
-            : `<div class="placeholder-text">Classic Example</div>`;
+            : `<div class="placeholder-text">Preview Image</div>`;
+        const priceClass = isFree ? 'free-badge' : '';
 
         card.innerHTML = `
             <div class="product-image">${imgHtml}</div>
             <div class="product-info">
                 <div class="product-title">${p.name}</div>
                 <div class="product-desc">${p.desc}</div>
+                <span class="price-badge ${priceClass}">${isFree ? 'GRATIS' : p.price}</span>
             </div>`;
         grid.appendChild(card);
     });
@@ -28,20 +53,81 @@ async function renderProducts() {
 
 function openDetail(p) {
     currentProduct = p;
-    document.getElementById('detailImg').innerHTML = p.img ? `<img src="${p.img}">` : `<div class="placeholder-text">Classic Example</div>`;
+    document.getElementById('detailImg').innerHTML = p.img ? `<img src="${p.img}">` : `<div class="placeholder-text">Preview Image</div>`;
     document.getElementById('detailTitle').innerText = p.name;
     document.getElementById('detailDesc').innerText = p.desc;
     document.getElementById('detailPrice').innerText = p.price;
+    
+    const actionWrapper = document.getElementById('actionWrapper');
+    const isFree = (p.price === '0' || p.price.toLowerCase().includes('gratis'));
+
+    if(isFree) {
+        actionWrapper.innerHTML = `<button class="btn-action btn-free" onclick="startFreeTask()">🎯 Get for FREE</button>`;
+    } else {
+        actionWrapper.innerHTML = `
+            <button class="btn-action btn-rek" onclick="actionRek()">Norek</button>
+            <button class="btn-action btn-qr" onclick="actionQR()">QRIS</button>
+        `;
+    }
+    
     document.getElementById('detailModal').classList.add('active');
 }
 function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
 
-// Actions
+// FREE TASK LOGIC
+function startFreeTask() {
+    closeDetailModal();
+    // Reset UI
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('verifyTaskBtn').disabled = true;
+    document.getElementById('timerText').innerText = "Wait 4 seconds...";
+    document.getElementById('taskJoinBtn').href = currentProduct.telegramLink || '#';
+    document.getElementById('taskModal').classList.add('active');
+
+    // Start Timer Animation
+    let timeLeft = 4;
+    const interval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('progressBar').style.width = ((4 - timeLeft) / 4 * 100) + '%';
+        document.getElementById('timerText').innerText = `Wait ${timeLeft} seconds...`;
+        
+        if(timeLeft <= 0) {
+            clearInterval(interval);
+            document.getElementById('timerText').innerText = "Verification Ready!";
+            document.getElementById('verifyTaskBtn').disabled = false;
+        }
+    }, 1000);
+}
+
+async function claimFreeProduct() {
+    const buyerName = prompt("Masukkan nama/username untuk klaim:");
+    if(!buyerName) return;
+
+    const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            productId: currentProduct.id, 
+            buyerName: buyerName, 
+            isFree: true 
+        })
+    });
+
+    if(res.ok) {
+        alert('✅ Klaim berhasil! Cek dashboard untuk download.');
+        document.getElementById('taskModal').classList.remove('active');
+        openDashboard();
+    } else {
+        alert('Gagal klaim.');
+    }
+}
+
+// PAID ACTIONS
 async function actionRek() {
     const res = await fetch('/api/settings');
     const set = await res.json();
     navigator.clipboard.writeText(set.rek);
-    alert('Nomor Rekening disalin: ' + set.rek);
+    alert('Nomor disalin: ' + set.rek);
     closeDetailModal();
     openVerif();
 }
@@ -49,30 +135,28 @@ async function actionRek() {
 async function actionQR() {
     const res = await fetch('/api/settings');
     const set = await res.json();
-    if(!set.qris) return alert('Seller belum set QRIS');
+    if(!set.qris) return alert('QR belum diset');
     window.open(set.qris, '_blank');
     closeDetailModal();
     openVerif();
 }
 
-// Verif Flow
+// VERIF PAID
 function openVerif() {
-    if(!currentProduct) return;
     document.getElementById('verifProdName').innerText = currentProduct.name;
     document.getElementById('verifModal').classList.add('active');
     document.getElementById('previewImg').style.display = 'none';
-    document.getElementById('uploadArea').style.display = 'flex';
+    document.getElementById('uploadArea').style.display = 'block';
 }
-function closeVerif() { document.getElementById('verifModal').classList.remove('active'); }
+function closeVerifModal() { document.getElementById('verifModal').classList.remove('active'); }
 
-const proofInput = document.getElementById('proofInput');
-document.getElementById('uploadArea').onclick = () => proofInput.click();
-proofInput.onchange = (e) => {
+document.getElementById('uploadArea').onclick = () => document.getElementById('proofInput').click();
+document.getElementById('proofInput').onchange = (e) => {
     const file = e.target.files[0];
     if(file){
         const reader = new FileReader();
-        reader.onload = (e) => {
-            document.getElementById('previewImg').src = e.target.result;
+        reader.onload = (ev) => {
+            document.getElementById('previewImg').src = ev.target.result;
             document.getElementById('previewImg').style.display = 'block';
             document.getElementById('uploadArea').style.display = 'none';
         };
@@ -82,7 +166,7 @@ proofInput.onchange = (e) => {
 
 async function submitProof() {
     const buyerName = document.getElementById('buyerNameInput').value;
-    const file = proofInput.files[0];
+    const file = document.getElementById('proofInput').files[0];
     if(!file) return alert('Upload bukti dulu');
 
     const fd = new FormData();
@@ -91,38 +175,38 @@ async function submitProof() {
     fd.append('buyerName', buyerName);
 
     const res = await fetch('/api/order', { method: 'POST', body: fd });
-    const result = await res.json();
-    
-    if(result.success) {
-        alert('Bukti terkirim! Tunggu verifikasi.');
-        closeVerif();
+    if(res.ok) {
+        alert('Bukti terkirim!');
+        closeVerifModal();
         openDashboard();
-    } else {
-        alert('Gagal kirim bukti.');
     }
 }
 
-// Dashboard
+// DASHBOARD
 async function openDashboard() {
-    const res = await fetch('/api/admin/orders'); // Pakai API yang sama (tanpa auth dulu buat simpel)
+    const res = await fetch('/api/admin/orders');
     const orders = await res.json();
     const body = document.getElementById('dashBody');
     
-    // Filter hanya milik user ini (simulasi simple, karna gak ada login buyer)
     body.innerHTML = orders.reverse().map(o => {
-        let status = `<span class="status-pending">Pending</span>`;
+        let status = `<span style="color:orange">Pending</span>`;
         let download = '';
-        if(o.status === 'valid'){
-            status = `<span class="status-valid">Valid</span>`;
-            // Cari file produk
-            download = `<a href="/api/products" onclick="alert('Cek email/file manager')" class="download-btn">📥 Download</a>`; // Placeholder
+        
+        if(o.status === 'valid') {
+            status = `<span style="color:var(--accent)">Valid ✅</span>`;
+            // Find product file
+            download = `<a href="/api/products" onclick="alert('Download started')" class="btn-action btn-rek" style="margin-top:10px; text-decoration:none">📥 Download</a>`;
         } else if(o.status === 'rejected') {
-            status = `<span class="status-invalid">Ditolak</span>`;
+            status = `<span style="color:red">Rejected</span>`;
         }
 
-        return `<div class="order-card">
-            <div><strong>${o.productName}</strong><br><small>${o.buyerName}</small>${download}</div>
-            ${status}
+        return `<div style="background:var(--bg-secondary); padding:15px; border-radius:12px; margin-bottom:10px">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+                <strong>${o.productName}</strong>
+                ${status}
+            </div>
+            <small style="color:var(--text-secondary)">${o.buyerName}</small>
+            ${download}
         </div>`;
     }).join('');
 
@@ -130,7 +214,7 @@ async function openDashboard() {
 }
 function closeDashboard() { document.getElementById('dashboardModal').classList.remove('active'); }
 
-// Login
+// LOGIN
 function promptSellerLogin() { document.getElementById('loginSidebar').classList.add('active'); }
 function closeSidebar() { document.getElementById('loginSidebar').classList.remove('active'); }
 async function verifySeller() {
@@ -142,7 +226,4 @@ async function verifySeller() {
     });
     if(res.ok) window.location.href = 'admin.html';
     else alert('Password salah!');
-}
-
-// Init
-renderProducts();
+                }
