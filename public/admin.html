@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller - Panzzx</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">⚙️ PanzzxConfig</div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showSection('products')">📦 Produk</a>
+                <a href="#" class="nav-item" onclick="showSection('orders')">💰 Orders</a>
+                <a href="#" class="nav-item" onclick="showSection('settings')">⚙️ Settings</a>
+            </nav>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </aside>
+
+        <main class="admin-main">
+            <!-- PRODUCTS -->
+            <section id="section-products" class="admin-section active">
+                <h2>Tambah Produk</h2>
+                <div class="form-grid">
+                    <input type="text" id="inpImg" placeholder="URL Gambar Produk (opsional)">
+                    <input type="text" id="inpName" placeholder="Nama Produk">
+                    <input type="text" id="inpPrice" placeholder="Harga (Rp)">
+                    <textarea id="inpDesc" placeholder="Deskripsi"></textarea>
+                    <div class="file-drop" id="fileDrop">📂 Upload File Produk (Drag/Drop)</div>
+                    <input type="file" id="inpFile" hidden>
+                    <button class="btn-add-product" onclick="addProduct()">Tambah</button>
+                </div>
+                <div class="product-list-admin" id="adminProdList"></div>
+            </section>
+
+            <!-- ORDERS -->
+            <section id="section-orders" class="admin-section">
+                <h2>Verifikasi Pembayaran</h2>
+                <div id="ordersList" class="orders-list"></div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="section-settings" class="admin-section">
+                <h2>Pengaturan</h2>
+                <div class="settings-card">
+                    <label>Nomor Rekening</label>
+                    <input type="text" id="setRek">
+                    <label>URL Gambar QRIS</label>
+                    <input type="text" id="setQris">
+                    <label>Ganti Password (5 digit)</label>
+                    <input type="text" id="setPass" maxlength="5">
+                    <button onclick="saveSettings()">Simpan</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>

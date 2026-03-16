@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": "6c202828-232a-4b7e-84e8-4f00e7c544b6",
+      "name": "Jailbeek",
+      "price": "15.000",
+      "desc": "Jailbreak gacor",
+      "img": "",
+      "file": "uploads/1773639819043-DARKENSV6.txt"
+    }
+  ],
+  "orders": [
+    {
+      "id": "6c6c7b84-cbbb-455c-b5ab-2ea4ba131ef1",
+      "productId": "6c202828-232a-4b7e-84e8-4f00e7c544b6",
+      "productName": "Jailbeek",
+      "buyerName": "Elzz",
+      "proof": "/uploads/1773640362515-1000015754.jpg",
+      "status": "pending",
+      "createdAt": "2026-03-16T05:52:42.652Z"
+    }
+  ],
+  "settings": {
+    "rek": "1234567890 (BCA - Seller)",
+    "qris": "",
+    "password": "PANZZ"
+  }
+}

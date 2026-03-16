@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PanzzxAutoOrder</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="header-inner">
+            <div class="logo">🛒 PanzzxAutoOrder</div>
+            <div class="header-actions">
+                <button class="btn-dashboard" onclick="openDashboard()">My Orders</button>
+                <button class="btn-admin" onclick="promptSellerLogin()">P</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-container">
+        <div class="market-title">
+            <h2>Market Products</h2>
+            <p>Pilih produk, bayar, terima otomatis.</p>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+    </main>
+
+    <!-- MODAL DETAIL -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content detail-modal">
+            <button class="close-modal" onclick="closeDetailModal()">×</button>
+            <div class="detail-image" id="detailImg"></div>
+            <h2 id="detailTitle"></h2>
+            <p id="detailDesc"></p>
+            <div class="price-tag" id="detailPrice"></div>
+            <div class="action-wrapper" id="actionWrapper">
+                <button class="btn-action btn-rek" onclick="actionRek()">Norek</button>
+                <button class="btn-action btn-qr" onclick="actionQR()">QRIS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="modal-overlay" id="dashboardModal">
+        <div class="modal-content dashboard-modal">
+            <div class="dash-header">
+                <h2>📦 My Orders</h2>
+                <button class="close-modal" onclick="closeDashboard()">×</button>
+            </div>
+            <div class="dash-body" id="dashBody"></div>
+        </div>
+    </div>
+
+    <!-- VERIF MODAL -->
+    <div class="modal-overlay" id="verifModal">
+        <div class="modal-content verif-modal">
+            <button class="close-modal" onclick="closeVerifModal()">×</button>
+            <div class="verif-header">
+                <h3>🚀 Konfirmasi Pembayaran</h3>
+                <p>Produk: <strong id="verifProdName"></strong></p>
+            </div>
+            <input type="text" id="buyerNameInput" placeholder="Nama / Username kamu" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px">
+            <div class="upload-area" id="uploadArea">
+                <span>📁 Klik upload bukti</span>
+                <input type="file" id="proofInput" hidden accept="image/*">
+            </div>
+            <img src="" id="previewImg" class="preview-img" style="display:none">
+            <button class="btn-submit-verif" onclick="submitProof()">Kirim Bukti</button>
+        </div>
+    </div>
+
+    <!-- LOGIN SIDEBAR -->
+    <div class="sidebar-overlay" id="loginSidebar">
+        <div class="sidebar-content">
+            <h3>🔐 Seller Access</h3>
+            <input type="password" id="sellerPass" maxlength="5" placeholder="*****">
+            <button class="btn-login" onclick="verifySeller()">Masuk</button>
+            <button class="btn-cancel" onclick="closeSidebar()">Batal</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
