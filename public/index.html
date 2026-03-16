@@ -40,13 +40,13 @@
         </div>
     </div>
 
-    <!-- TASK MODAL (SUB2UNLOCK STYLE) -->
+    <!-- TASK MODAL -->
     <div class="modal-overlay" id="taskModal">
         <div class="modal-content task-modal">
             <button class="close-modal" onclick="closeTaskModal()">×</button>
             <div class="task-header">
                 <h3>🎁 Klaim Gratis</h3>
-                <p>Selesaikan task di bawah untuk mendapat produk</p>
+                <p>Selesaikan task di bawah</p>
             </div>
             <div class="task-body" id="taskListContainer"></div>
             <div class="task-footer">
@@ -60,9 +60,9 @@
         <div class="modal-content detail-modal">
             <button class="close-modal" onclick="closeVerifModal()">×</button>
             <h3>🚀 Pembayaran</h3>
-            <p style="color:var(--text-secondary); margin: 10px 0">Produk: <strong id="verifProdName"></strong></p>
+            <p style="color:var(--text-secondary)">Produk: <strong id="verifProdName"></strong></p>
             <input type="text" id="buyerNameInput" placeholder="Nama Kamu" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none; background:var(--bg-secondary); color:var(--text-primary)">
-            <div class="file-drop" id="uploadArea" style="padding:20px; margin-bottom:10px">
+            <div class="file-drop" id="uploadArea" style="padding:20px; margin-bottom:10px; display:flex; justify-content:center; cursor:pointer">
                 <span>📁 Upload Bukti</span>
                 <input type="file" id="proofInput" hidden accept="image/*">
             </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
 
-    <!-- LOGIN SIDEBAR -->
+    <!-- SIDEBAR LOGIN (HIDDEN DEFAULT) -->
     <div class="sidebar-overlay" id="loginSidebar">
         <div class="sidebar-content">
             <h3>🔐 Seller</h3>
@@ -92,4 +92,4 @@
 
     <script src="app.js"></script>
 </body>
-                </html>
+                                  </html>
