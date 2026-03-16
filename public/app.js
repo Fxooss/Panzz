@@ -71,7 +71,7 @@ function openVerif() {
     document.getElementById('verifProdName').innerText = currentProduct.name;
     document.getElementById('verifModal').classList.add('active');
     document.getElementById('previewImg').style.display = 'none';
-    document.getElementById('uploadArea').style.display = 'block';
+    document.getElementById('uploadArea').style.display = 'flex';
 }
 function closeVerifModal() { document.getElementById('verifModal').classList.remove('active'); }
 document.getElementById('uploadArea').onclick = () => document.getElementById('proofInput').click();
@@ -95,18 +95,16 @@ async function submitProof() {
     if(await (await fetch('/api/order', { method: 'POST', body: fd })).ok) { alert('Terkirim!'); closeVerifModal(); openDashboard(); }
 }
 
-// TASK SYSTEM (SUB2UNLOCK)
+// TASK SYSTEM
 function startTask() {
     closeDetailModal();
     const links = currentProduct.telegramLinks || [];
     if (links.length === 0) return alert('Task belum diset');
-
     taskProgress = new Array(links.length).fill(false);
     renderTaskList(links);
     document.getElementById('btnClaim').disabled = true;
     document.getElementById('taskModal').classList.add('active');
 }
-
 function renderTaskList(links) {
     const container = document.getElementById('taskListContainer');
     container.innerHTML = links.map((link, i) => `
@@ -120,22 +118,17 @@ function renderTaskList(links) {
         </div>
     `).join('');
 }
-
 function openTaskLink(index, url) {
     window.open(url, '_blank');
-    // Simulasi Verifikasi 1 detik
     setTimeout(() => {
         taskProgress[index] = true;
         renderTaskList(currentProduct.telegramLinks);
         checkAllTasks();
     }, 1000);
 }
-
 function checkAllTasks() {
-    const allDone = taskProgress.every(x => x);
-    if (allDone) document.getElementById('btnClaim').disabled = false;
+    if (taskProgress.every(x => x)) document.getElementById('btnClaim').disabled = false;
 }
-
 async function claimFree() {
     const buyer = prompt('Nama/Username:');
     if(!buyer) return;
@@ -163,7 +156,7 @@ async function openDashboard() {
 }
 function closeDashboard() { document.getElementById('dashboardModal').classList.remove('active'); }
 
-// LOGIN
+// LOGIN SIDEBAR
 function promptSellerLogin() { document.getElementById('loginSidebar').classList.add('active'); }
 function closeSidebar() { document.getElementById('loginSidebar').classList.remove('active'); }
 async function verifySeller() {
