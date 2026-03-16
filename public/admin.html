@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller - Panzzx</title>
+    <title>Seller Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
@@ -23,13 +23,21 @@
             <section id="section-products" class="admin-section active">
                 <h2>Tambah Produk</h2>
                 <div class="form-grid">
-                    <input type="text" id="inpImg" placeholder="URL Gambar Produk (opsional)">
+                    <input type="text" id="inpImg" placeholder="URL Gambar (Opsional)">
                     <input type="text" id="inpName" placeholder="Nama Produk">
-                    <input type="text" id="inpPrice" placeholder="Harga (Rp)">
-                    <textarea id="inpDesc" placeholder="Deskripsi"></textarea>
-                    <div class="file-drop" id="fileDrop">📂 Upload File Produk (Drag/Drop)</div>
+                    <input type="text" id="inpPrice" placeholder="Harga (0 = Gratis)">
+                    <textarea id="inpDesc" placeholder="Deskripsi" style="grid-column: span 2"></textarea>
+                    
+                    <!-- MULTI LINK AREA -->
+                    <div class="form-group full-width" style="background: var(--bg-secondary); padding: 15px; border-radius: 12px;">
+                        <label>🔗 Link Task (Khusus Produk Gratis)</label>
+                        <div id="teleLinksContainer" style="margin-top:10px; display:flex; flex-direction:column; gap:8px"></div>
+                        <button type="button" onclick="addLinkInput()" style="margin-top:10px; background:transparent; border:1px dashed var(--accent); color:var(--accent); padding:8px; border-radius:8px; cursor:pointer; width:100%">+ Tambah Link</button>
+                    </div>
+
+                    <div class="file-drop" id="fileDrop" style="grid-column: span 2" onclick="document.getElementById('inpFile').click()">📂 Upload File</div>
                     <input type="file" id="inpFile" hidden>
-                    <button class="btn-add-product" onclick="addProduct()">Tambah</button>
+                    <button class="btn-add" style="grid-column: span 2" onclick="addProduct()">Tambah</button>
                 </div>
                 <div class="product-list-admin" id="adminProdList"></div>
             </section>
@@ -43,14 +51,20 @@
             <!-- SETTINGS -->
             <section id="section-settings" class="admin-section">
                 <h2>Pengaturan</h2>
-                <div class="settings-card">
-                    <label>Nomor Rekening</label>
-                    <input type="text" id="setRek">
-                    <label>URL Gambar QRIS</label>
-                    <input type="text" id="setQris">
-                    <label>Ganti Password (5 digit)</label>
-                    <input type="text" id="setPass" maxlength="5">
-                    <button onclick="saveSettings()">Simpan</button>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Nomor Rekening</label>
+                        <input type="text" id="setRek">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>URL QRIS</label>
+                        <input type="text" id="setQris">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Password Login</label>
+                        <input type="text" id="setPass" maxlength="5">
+                    </div>
+                    <button class="btn-add" style="grid-column: span 2" onclick="saveSettings()">Simpan</button>
                 </div>
             </section>
         </main>
