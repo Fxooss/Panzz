@@ -1,3 +1,30 @@
+// === AUTH CHECK ===
+async function attemptLogin() {
+    const pass = document.getElementById('adminPassInput').value;
+    const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass })
+    });
+
+    if (res.ok) {
+        document.getElementById('adminLoginOverlay').style.display = 'none';
+        initApp();
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+    }
+}
+
+// Check if already logged in this session (simple flag)
+// Jika refresh halaman, minta password lagi demi keamanan, atau biarin aja gpp.
+
+function initApp() {
+    loadProducts();
+    loadSettings();
+    addLinkInput(); // Init 1 input link
+}
+
+// === VARS ===
 let currentProdFile = null;
 let linkCount = 0;
 
@@ -52,7 +79,7 @@ async function addProduct() {
     if (await (await fetch('/api/admin/products', { method: 'POST', body: fd })).ok) {
         alert('Saved!');
         loadProducts();
-        // Reset
+        // Reset Form
         document.getElementById('inpName').value = ''; 
         document.getElementById('inpPrice').value = '';
         document.getElementById('inpDesc').value = ''; 
@@ -130,8 +157,3 @@ function showSection(id) {
     if(id === 'settings') loadSettings();
 }
 function logout() { window.location.href = 'index.html'; }
-
-// Init
-addLinkInput();
-loadProducts();
-loadSettings();
